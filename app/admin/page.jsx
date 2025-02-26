@@ -1,11 +1,23 @@
 "use client"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import Users from "./page.json";
 
 export default function Admin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [invalidCredsClass, setInvalidCredsClass] = useState("mb-4 collapse");
+
+  const onSubmit = () => {
+    for (const [key, value] of Object.entries(Users)) {
+      console.log(atob(value[0]))
+      if (key === username && atob(value[0]) === password && value[1] === true) {
+        return window.location.href = "/admin/dashboard"
+      }
+    }
+    return setInvalidCredsClass("mb-4");
+  }
 
   return (
     <>
@@ -15,14 +27,15 @@ export default function Admin() {
         <Form className="w-3xl mt-4 mb-4">
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Username</Form.Label>
-            <Form.Control size="lg" type="email" placeholder="Username" />
+            <Form.Control size="lg" type="email" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
             <Form.Label>Password</Form.Label>
-            <Form.Control size="lg" type="password" placeholder="Password" rows={3} />
+            <Form.Control size="lg" type="password" placeholder="Password" onKeyUp={(e) => (e.key === "Enter") ? onSubmit() : null} onChange={(e) => setPassword(e.target.value)} />
           </Form.Group>
         </Form>
-        <Button size="lg" type="submit">Sign in</Button>
+        <h4 className={invalidCredsClass} style={{ color: "red" }}>Invalid credentials.</h4>
+        <Button size="lg" type="submit" onClick={onSubmit}>Sign in</Button>
         <div className="absolute bottom-0 w-full flex items-center justify-center py-4 text-secondary">
           <p className="text-secondary">Proudly powered by Next.js and independent of SQLite.</p>
         </div>
