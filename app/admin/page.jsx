@@ -2,20 +2,24 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import React, { useState } from 'react';
-import Users from "./page.json";
+import Users from "../../data/page.json";
 
 export default function Admin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [invalidCredsClass, setInvalidCredsClass] = useState("mb-4 collapse");
 
+  const usernameField = React.createRef();
+  const passwordField = React.createRef();
+
   const onSubmit = () => {
     for (const [key, value] of Object.entries(Users)) {
-      console.log(atob(value[0]))
       if (key === username && atob(value[0]) === password && value[1] === true) {
         return window.location.href = "/admin/dashboard"
       }
     }
+    usernameField.current.value = "";
+    passwordField.current.value = "";
     return setInvalidCredsClass("mb-4");
   }
 
@@ -25,13 +29,13 @@ export default function Admin() {
         <h1>Admin Panel</h1>
         <h4 className="text-secondary" style={{ marginTop: "10px" }}>Please login using valid ConsumerFolder credentials to continue.</h4>
         <Form className="w-3xl mt-4 mb-4">
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Group className="mb-3" controlId="username">
             <Form.Label>Username</Form.Label>
-            <Form.Control size="lg" type="email" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+            <Form.Control ref={usernameField} size="lg" type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+          <Form.Group className="mb-3" controlId="password">
             <Form.Label>Password</Form.Label>
-            <Form.Control size="lg" type="password" placeholder="Password" onKeyUp={(e) => (e.key === "Enter") ? onSubmit() : null} onChange={(e) => setPassword(e.target.value)} />
+            <Form.Control ref={passwordField} size="lg" type="password" placeholder="Password" onKeyUp={(e) => (e.key === "Enter") ? onSubmit() : null} onChange={(e) => setPassword(e.target.value)} />
           </Form.Group>
         </Form>
         <h4 className={invalidCredsClass} style={{ color: "red" }}>Invalid credentials.</h4>
