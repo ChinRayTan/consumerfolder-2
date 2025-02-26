@@ -1,16 +1,26 @@
 "use client"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import React, { useState } from 'react';
-import Users from "../../data/page.json";
+import React, { useEffect, useState } from 'react';
 
 export default function Admin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [invalidCredsClass, setInvalidCredsClass] = useState("mb-4 collapse");
+  const [Users, setUsers] = useState({});
 
   const usernameField = React.createRef();
   const passwordField = React.createRef();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetch('/page.json')
+      const posts = await data.json()
+      console.log(posts)
+      setUsers(posts)
+    }
+    fetchData();
+  }, [])
 
   const onSubmit = () => {
     for (const [key, value] of Object.entries(Users)) {
