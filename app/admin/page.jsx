@@ -2,7 +2,7 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import React, { useState } from 'react';
-import Users from "../../data/page.json";
+import Users from "page.json";
 
 export default function Admin() {
   const [username, setUsername] = useState("");
