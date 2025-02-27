@@ -2,6 +2,7 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import React, { useEffect, useState } from 'react';
+import cookieCutter from "@boiseitguru/cookie-cutter";
 
 export default function Admin() {
   const [username, setUsername] = useState("");
@@ -25,6 +26,8 @@ export default function Admin() {
   const onSubmit = () => {
     for (const [key, value] of Object.entries(Users)) {
       if (key === username && atob(value[0]) === password && value[1] === true) {
+        cookieCutter.set("user", username)
+        cookieCutter.set("password", btoa(password))
         return window.location.href = "/admin/dashboard"
       }
     }
